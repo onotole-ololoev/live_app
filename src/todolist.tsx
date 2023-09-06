@@ -34,6 +34,9 @@ const Todolist = (props: TodolistType) => {
             setNewTaskTitle('')
         }
     }
+    let onChangeFilterToAll = () => props.changeFilterValue('all')
+    let onChangeFilterToActive = () => props.changeFilterValue('active')
+    let onChangeFilterToCompleted = () => props.changeFilterValue('completed')
 
     return (
         <div>
@@ -49,19 +52,24 @@ const Todolist = (props: TodolistType) => {
             </div>
             <ul>
                 {props.tasks.map(el => {
+
+                    let removeTaskHandle = () => {
+                        props.removeTask(el.id)
+                    }
+
                     return <li key={el.id}>
                         <div>
                             <input type="checkbox" checked={el.isDone}/>
                             <span>{el.title}</span>
-                            <button onClick={() => props.removeTask(el.id)}>delete</button>
+                            <button onClick={removeTaskHandle}>delete</button>
                         </div>
                     </li>
                 })}
             </ul>
             <div>
-                <button onClick={() => props.changeFilterValue('all')}>all</button>
-                <button onClick={() => props.changeFilterValue('active')}>active</button>
-                <button onClick={() => props.changeFilterValue('completed')}>completed</button>
+                <button onClick={onChangeFilterToAll}>all</button>
+                <button onClick={onChangeFilterToActive}>active</button>
+                <button onClick={onChangeFilterToCompleted}>completed</button>
             </div>
         </div>
     );

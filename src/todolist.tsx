@@ -1,5 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType} from "./App";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 export type TasksType = {
     id: string
@@ -18,12 +20,14 @@ export type TodolistType = {
 const Todolist = (props: TodolistType) => {
 
     let [newTaskTitle, setNewTaskTitle] = useState<string>('')
+    let [error, setError] = useState<string | null>(null)
 
     let onHandleChangeTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.currentTarget.value)
     }
 
     let onEnterPressTaskAdd = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
         if (e.ctrlKey && e.charCode === 13) {
             addNewTask()
         }
@@ -33,8 +37,10 @@ const Todolist = (props: TodolistType) => {
         if (newTaskTitle.trim() !== '') {
             props.addTask(newTaskTitle.trim())
             setNewTaskTitle('')
+
+        } else {
+            setError('Title is required')
         }
-        setNewTaskTitle('')
     }
     let onChangeFilterToAll = () => props.changeFilterValue('all')
     let onChangeFilterToActive = () => props.changeFilterValue('active')
@@ -49,8 +55,10 @@ const Todolist = (props: TodolistType) => {
                 <input type="text"
                        value={newTaskTitle}
                        onChange={onHandleChangeTaskTitle}
-                       onKeyPress={onEnterPressTaskAdd}/>
+                       onKeyPress={onEnterPressTaskAdd}
+                       className={error ? 'error' : ''}/>
                 <button onClick={addNewTask}>add task</button>
+                {error ? <div className={'error-message'}>{error}</div> : null}
             </div>
             <ul>
                 {props.tasks.map(el => {

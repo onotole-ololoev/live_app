@@ -50,8 +50,8 @@ function App() {
     }
 
   return (
-    <div className="App">
-      <Todolist title={"films"}
+    <div className="wrapper">
+      <Todolist title={"My film's collection"}
                 tasks={tasksForRender}
                 removeTask={removeTask}
                 addTask={addTask}
